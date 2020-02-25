@@ -3,7 +3,7 @@ import React from "react";
 const input = props => {
   return (
     <div>
-      <h1>Basic cantor with api NBP</h1>
+      <h1>Basic cantor based on react with api NBP</h1>
       <p>Enter value</p>
       <input type="number" placeholder="PLN" />
       <p>Choose currency</p>
