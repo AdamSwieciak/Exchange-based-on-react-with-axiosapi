@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
-import Input from "./Components/Input/input";
 import Output from "./Components/Output/output";
 import axios from "axios";
 
 class App extends Component {
   state = {
     currencyarr: [],
-    newar: []
+    valueCurrency: "",
+    valueEnter: 0,
+    math: 0
   };
 
   componentDidMount() {
@@ -17,8 +18,8 @@ class App extends Component {
     });
   }
 
-  exchanger(codeinp) {
-    let val = 0;
+  exchanger = codeinp => {
+    let val = "";
     this.state.currencyarr.forEach(person => {
       person.rates.forEach(elem => {
         if (elem.code === codeinp) {
@@ -26,8 +27,23 @@ class App extends Component {
         }
       });
     });
-    return val;
-  }
+
+    function Round(n, k) {
+      var factor = Math.pow(10, k);
+      return Math.round(n * factor) / factor;
+    }
+
+    let math = Round(this.state.valueEnter / val, 2);
+    this.setState({ math });
+  };
+
+  handleChange = event => {
+    this.setState({ valueCurrency: event.target.value });
+  };
+
+  handleChangeval = event => {
+    this.setState({ valueEnter: event.target.value });
+  };
 
   render() {
     return (
@@ -36,9 +52,33 @@ class App extends Component {
           <h1 className="App-title">Exchange </h1>
         </header>
         <section className="App-intro">
-          <Input />
-          <Output outp={this.exchanger("EUR")} />
+          <h1>Basic cantor based on react with api NBP</h1>
+          <p>Enter value</p>
+          <input
+            type="number"
+            placeholder="PLN"
+            value={this.state.valueEnter}
+            onChange={this.handleChangeval}
+          />
+          <p>Choose currency</p>
+          <select
+            name="currency"
+            value={this.state.valueCurrency}
+            onChange={this.handleChange}
+          >
+            <option value="EUR">Euro</option>
+            <option value="USD">Dolar</option>
+            <option value="CHF">Frank szwajcarski</option>
+            <option value="HUF">Forint</option>
+            <option value="UAH">Hrywna</option>
+            <option value="JPY">Jen</option>
+            <option value="CZK">Korona czeska</option>
+          </select>
         </section>
+        <Output vale={this.state.math} />
+        <button onClick={() => this.exchanger(this.state.valueCurrency)}>
+          Convert
+        </button>
       </div>
     );
   }
