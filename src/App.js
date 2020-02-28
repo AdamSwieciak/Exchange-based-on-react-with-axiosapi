@@ -11,6 +11,7 @@ class App extends Component {
     math: 0
   };
 
+  // COLLECTION AXIOS DATE
   componentDidMount() {
     axios.get(`http://api.nbp.pl/api/exchangerates/tables/a/`).then(res => {
       const currencyarr = res.data;
@@ -18,29 +19,42 @@ class App extends Component {
     });
   }
 
+  //FUNCTION RETURNED VALUE
   exchanger = codeinp => {
-    let val = "";
+    let currencyValue = "";
+    let math = 0;
+    let enterValue = this.state.valueEnter;
+
+    // Loop who find value of currency currencyValue=(np.3,14)
     this.state.currencyarr.forEach(person => {
       person.rates.forEach(elem => {
         if (elem.code === codeinp) {
-          val = elem.mid;
+          currencyValue = elem.mid;
         }
       });
     });
 
+    //ROUNDING FUNCTION
     function Round(n, k) {
       var factor = Math.pow(10, k);
       return Math.round(n * factor) / factor;
     }
 
-    let math = Round(this.state.valueEnter / val, 2);
+    //CHECK EMPTY OR NULL INPUT POOL
+    if (enterValue === 0 || currencyValue === "") {
+      math = 0;
+    } else {
+      math = Round(enterValue / currencyValue, 2) + " " + codeinp;
+    }
+
+    //RETURN END VALUE
     this.setState({ math });
   };
-
+  //SELECT HANDLER
   handleChange = event => {
     this.setState({ valueCurrency: event.target.value });
   };
-
+  //INPUT VALUE HANDLER
   handleChangeval = event => {
     this.setState({ valueEnter: event.target.value });
   };
@@ -53,7 +67,7 @@ class App extends Component {
         </header>
         <section className="App-intro">
           <h1>Basic cantor based on react with api NBP</h1>
-          <p>Enter value</p>
+          <p>Enter value in PLN</p>
           <input
             type="number"
             placeholder="PLN"
@@ -66,6 +80,7 @@ class App extends Component {
             value={this.state.valueCurrency}
             onChange={this.handleChange}
           >
+            <option value="">Choose</option>
             <option value="EUR">Euro</option>
             <option value="USD">Dolar</option>
             <option value="CHF">Frank szwajcarski</option>
