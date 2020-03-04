@@ -1,5 +1,14 @@
+body {
+  background-image: url(./img/cash-coins-money-pattern-259165.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
 .App {
   text-align: center;
+  background-color: rgba(255, 255, 255, 0.657);
+  padding-bottom: 30px;
 }
 
 .App-header {

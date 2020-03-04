@@ -1,0 +1,18 @@
+#Table {
+  position: absolute;
+  top: 25vh;
+  right: 10px;
+  border: 1px black solid;
+  border-collapse: collapse;
+}
+#Table td {
+  border: 1px black solid;
+  padding: 3px 10px;
+}
+#Table tr:nth-child(1) {
+  font-weight: bold;
+}
+#Table caption {
+  margin: 10px;
+  font-weight: bold;
+}

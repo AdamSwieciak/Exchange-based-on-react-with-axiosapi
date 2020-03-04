@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Output from "./Components/Output/output";
+import Table from "./Components/table/table";
 import axios from "axios";
 
 class App extends Component {
@@ -8,14 +9,24 @@ class App extends Component {
     currencyarr: [],
     valueCurrency: "",
     valueEnter: 0,
-    math: 0
+    math: 0,
+    tableWithValue: []
   };
 
-  // COLLECTION AXIOS DATE
+  // COLLECTION AXIOS DATA
   componentDidMount() {
     axios.get(`http://api.nbp.pl/api/exchangerates/tables/a/`).then(res => {
       const currencyarr = res.data;
-      this.setState({ currencyarr });
+      let tableWithValue = [];
+      let currencys = ["EUR", "USD", "CHF", "HUF", "UAH", "JPY", "CZK"];
+      currencys.forEach(element => {
+        currencyarr[0].rates.forEach(el => {
+          if (element === el.code) {
+            tableWithValue.push(el.mid);
+          }
+        });
+      });
+      this.setState({ currencyarr, tableWithValue });
     });
   }
 
@@ -33,7 +44,6 @@ class App extends Component {
         }
       });
     });
-
     //ROUNDING FUNCTION
     function Round(n, k) {
       var factor = Math.pow(10, k);
@@ -66,14 +76,14 @@ class App extends Component {
           <h1 className="App-title">Exchange </h1>
         </header>
         <section className="App-intro">
-          <h1>Basic cantor based on react with api NBP</h1>
+          <h1>Basic cantor based on react, with api NBP</h1>
           <p>Enter value in PLN</p>
           <input
             type="number"
-            placeholder="PLN"
             value={this.state.valueEnter}
             onChange={this.handleChangeval}
           />
+          <h3>{this.state.valueEnter} PLN</h3>
           <p>Choose currency</p>
           <select
             name="currency"
@@ -94,6 +104,7 @@ class App extends Component {
         <button onClick={() => this.exchanger(this.state.valueCurrency)}>
           Convert
         </button>
+        <Table mainarr={this.state.tableWithValue} />
       </div>
     );
   }
